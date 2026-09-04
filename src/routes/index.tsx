@@ -157,7 +157,13 @@ function CommandCenter() {
   const negate = (v: number | null) => (v === null ? null : -v);
 
   const periodSuffix =
-    granularity === "month" ? "" : granularity === "quarter" ? " · quarter" : " · YTD";
+    granularity === "month"
+      ? ""
+      : granularity === "quarter"
+        ? " · quarter"
+        : granularity === "ytd"
+          ? " · YTD"
+          : " · fiscal year";
 
   const kpis: Kpi[] = [
     {

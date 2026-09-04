@@ -136,6 +136,13 @@ describe("periods", () => {
     expect(ytd[3].months).toHaveLength(4);
   });
 
+  it("groups August through July into one fiscal year", () => {
+    const years = periodsFor("year", MONTHS);
+    expect(years).toHaveLength(1);
+    expect(years[0].months.map((month) => month.id)).toEqual(MONTHS.map((month) => month.id));
+    expect(years[0].complete).toBe(true);
+  });
+
   it("returns no prior period for the first one", () => {
     const months = periodsFor("month");
     expect(priorPeriodOf(months[0], months)).toBeNull();

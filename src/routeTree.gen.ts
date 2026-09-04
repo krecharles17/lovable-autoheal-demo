@@ -9,29 +9,29 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiScenarioRouteImport } from './routes/api/scenario'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ApiCommentaryRouteImport } from './routes/api/commentary'
+import { Route as ApiScenarioRouteImport } from './routes/api/scenario'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiScenarioRoute = ApiScenarioRouteImport.update({
-  id: '/api/scenario',
-  path: '/api/scenario',
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCommentaryRoute = ApiCommentaryRouteImport.update({
   id: '/api/commentary',
   path: '/api/commentary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiScenarioRoute = ApiScenarioRouteImport.update({
+  id: '/api/scenario',
+  path: '/api/scenario',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -71,13 +71,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -85,11 +78,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/scenario': {
-      id: '/api/scenario'
-      path: '/api/scenario'
-      fullPath: '/api/scenario'
-      preLoaderRoute: typeof ApiScenarioRouteImport
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/commentary': {
@@ -97,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: '/api/commentary'
       fullPath: '/api/commentary'
       preLoaderRoute: typeof ApiCommentaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/scenario': {
+      id: '/api/scenario'
+      path: '/api/scenario'
+      fullPath: '/api/scenario'
+      preLoaderRoute: typeof ApiScenarioRouteImport
       parentRoute: typeof rootRouteImport
     }
   }

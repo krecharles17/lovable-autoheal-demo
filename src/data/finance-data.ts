@@ -572,8 +572,8 @@ export function annualisedRunRate(months: MonthRecord[], scenario: Scenario): nu
   return (a.revenueByLine.platform + a.revenueByLine.usage + a.revenueByLine.marketplace) * 12;
 }
 
-// ---------- periods: month, quarter, year to date ----------
-export type Granularity = "month" | "quarter" | "ytd";
+// ---------- periods: month, quarter, year to date, fiscal year ----------
+export type Granularity = "month" | "quarter" | "ytd" | "year";
 
 export interface Period {
   id: string;
@@ -671,16 +671,22 @@ export function periodsFor(granularity: Granularity, months: MonthRecord[] = MON
   const meta = new Map<string, { label: string; shortLabel: string }>();
 
   for (const m of src) {
+    const fy = granularity === "year" ? yearNumberOf(m.id) : fiscalYearOf(m.id);
     const q = Math.floor(fiscalIndexOf(m.id) / 3) + 1;
-    const key = `${fiscalYearOf(m.id)}-Q${q}`;
+    const key = granularity === "year" ? `${fy}` : `${fy}-Q${q}`;
     if (!groups.has(key)) {
       groups.set(key, []);
-      meta.set(key, { label: `Q${q} ${fyLabel(m.id)}`, shortLabel: `Q${q}` });
+      meta.set(
+        key,
+        granularity === "year"
+          ? { label: fyLabel(m.id), shortLabel: fyLabel(m.id) }
+          : { label: `Q${q} ${fyLabel(m.id)}`, shortLabel: `Q${q}` },
+      );
     }
     groups.get(key)!.push(m);
   }
 
-  const expected = 3;
+  const expected = granularity === "year" ? 12 : 3;
   return [...groups.entries()]
     .sort((a, b) => a[0].localeCompare(b[0]))
     .map(([key, ms]) => {
@@ -722,18 +728,26 @@ export function priorPeriodOf(period: Period, all: Period[]): Period | null {
   return prev.months.length === period.months.length ? prev : null;
 }
 
-/** "vs prior month" / "vs prior quarter" / "vs prior year to date". */
+/** Comparison caption for the selected reporting granularity. */
 export function priorPeriodCaption(granularity: Granularity): string {
   return granularity === "month"
     ? "vs prior month"
     : granularity === "quarter"
       ? "vs prior quarter"
-      : "vs prior year to date";
+      : granularity === "ytd"
+        ? "vs prior year to date"
+        : "vs prior fiscal year";
 }
 
-/** How the period is named in running copy: "quarter", "month", "year to date". */
+/** How the selected period is named in running copy. */
 export function granularityNoun(granularity: Granularity): string {
-  return granularity === "month" ? "month" : granularity === "quarter" ? "quarter" : "year to date";
+  return granularity === "month"
+    ? "month"
+    : granularity === "quarter"
+      ? "quarter"
+      : granularity === "ytd"
+        ? "year to date"
+        : "fiscal year";
 }
 
 /** Plain sentence naming a partial period, or null when it is complete. */

@@ -9,10 +9,11 @@ import {
 } from "@/components/cfo/ScenarioComposer";
 import { ThemeToggle } from "@/components/cfo/ThemeToggle";
 
-const GRANULARITIES: Array<{ key: Granularity; label: string; full: string }> = [
+export const GRANULARITIES: Array<{ key: Granularity; label: string; full: string }> = [
   { key: "month", label: "M", full: "Month" },
   { key: "quarter", label: "Q", full: "Quarter" },
   { key: "ytd", label: "YTD", full: "Year to date" },
+  { key: "year", label: "FY", full: "Fiscal year" },
 ];
 
 /**
