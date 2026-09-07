@@ -671,7 +671,7 @@ export function periodsFor(granularity: Granularity, months: MonthRecord[] = MON
   const meta = new Map<string, { label: string; shortLabel: string }>();
 
   for (const m of src) {
-    const fy = granularity === "year" ? yearNumberOf(m.id) : fiscalYearOf(m.id);
+    const fy = fiscalYearOf(m.id);
     const q = Math.floor(fiscalIndexOf(m.id) / 3) + 1;
     const key = granularity === "year" ? `${fy}` : `${fy}-Q${q}`;
     if (!groups.has(key)) {
